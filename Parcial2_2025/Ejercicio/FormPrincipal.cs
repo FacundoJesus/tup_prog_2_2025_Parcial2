@@ -18,19 +18,19 @@ namespace Ejercicio
 
             foreach (Paquete paquete in sistema.ListaPaquetes)
             {
-                if (lsb3.Items.Count > 0 && paquete.ZonaDestino == "3")
+                if (paquete.ZonaDestino == "1")
+                {
+                    lsb1.Items.Add(paquete);
+                }
+                else
+                if (paquete.ZonaDestino == "2")
+                {
+                    lsb2.Items.Add(paquete);
+                }
+                else
+                if (paquete.ZonaDestino == "3")
                 {
                     lsb3.Items.Add(paquete);
-                }
-                else
-                if (lsb2.Items.Count > 0 && paquete.ZonaDestino == "2")
-                {
-                    lsb2.Items.Add(paquete);
-                }
-                else
-                if (lsb1.Items.Count > 0 && paquete.ZonaDestino == "1")
-                {
-                    lsb2.Items.Add(paquete);
                 }
 
             }
@@ -41,9 +41,9 @@ namespace Ejercicio
             lsbCarga.Items.Clear();
             if (camionElegido > -1)
             {
-                foreach (string s in sistema.VerCargaCamion(camionElegido))
+                foreach (string linea in sistema.VerCargaCamion(camionElegido))
                 {
-                    lsbCarga.Items.Add(s);
+                    lsbCarga.Items.Add(linea);
                 }
             }
         }
@@ -54,42 +54,58 @@ namespace Ejercicio
 
         private void btnIniciar_Click(object sender, EventArgs e)
         {
+           
             camionElegido = cmbCamiones.SelectedIndex;
-
+            MessageBox.Show("Camion Iniciado!");
             VerCarga();
+
+            double pesoInicio = 0;
+            tbPesoAcumulado.Text = pesoInicio.ToString("0.00");
+            
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             Paquete paquete = null;
+            try
+            {
+                if (lsb3.Items.Count > 0)
+                {
+                    paquete = lsb3.Items[0] as Paquete;
+                }
+                else
+                if (lsb2.Items.Count > 0)
+                {
+                    paquete = lsb2.Items[0] as Paquete;
+                }
+                else
+                if (lsb1.Items.Count > 0)
+                {
+                    paquete = lsb1.Items[0] as Paquete;
+                }
 
-            if (lsb3.Items.Count > 0)
-            {
-                paquete = lsb3.Items[0] as Paquete;
-            }
-            else
-            if (lsb2.Items.Count > 0)
-            {
-                paquete = lsb2.Items[0] as Paquete;
-            }
-            else
-            if (lsb1.Items.Count > 0)
-            {
-                paquete = lsb1.Items[0] as Paquete;
-            }
 
+                if (paquete != null && camionElegido < -1)
+                {
+                    double pesoActual = sistema.CargarPaquete(camionElegido, paquete);
 
-            if (paquete != null && camionElegido != -1)
-            {
-                double pesoActual = sistema.CargarPaquete(camionElegido, paquete);
+                    tbPesoAcumulado.Text = pesoActual.ToString("0.00");
 
-                tbPesoAcumulado.Text = Convert.ToString(pesoActual);
-                MostrarListaZonas();
-                VerCarga();
+                    MostrarListaZonas();
+                    VerCarga();
+                }
+                else
+                {
+                    MessageBox.Show("No hay Paquetes para descargar o no se ha seleccionado un Camion del Combobox");
+                }
             }
-            else
+            catch(NullReferenceException ex)
             {
-                MessageBox.Show("No hay Paquetes para descargar o no se ha seleccionado un Camion del Combobox");
+                MessageBox.Show(ex.Message,"Paquete Nulo",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Otro tipo de Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -100,7 +116,7 @@ namespace Ejercicio
             {
                 double pesoActual = sistema.RetirarPaquete(camionElegido);
 
-                tbPesoAcumulado.Text = Convert.ToString(pesoActual);
+                tbPesoAcumulado.Text = pesoActual.ToString("0.00");
                 MostrarListaZonas();
                 VerCarga();
             }
@@ -112,10 +128,54 @@ namespace Ejercicio
 
         private void btnImportarPaquetesPedidos_Click(object sender, EventArgs e)
         {
+            openFileDialog1.Filter = "(csv)|*.csv";
+            openFileDialog1.Title = "IMPORTACIÓN DE PAQUETES";
+            if(openFileDialog1.ShowDialog() == DialogResult.OK) {
+                string path = openFileDialog1.FileName;
+                FileStream fs = null;
+                try
+                {
+                    fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+                    sistema.Descargar(fs);
 
+                    MostrarListaZonas();
+                    
+                    MessageBox.Show("Paquetes Importados!");
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error en la Importación de paquetes",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    if (fs != null) fs.Close();
+                }
+            }
         }
+
         private void btnEnviar_Click(object sender, EventArgs e)
         {
+            FileStream fs = null;
+            string path = cmbCamiones.SelectedIndex.ToString() + "carga.csv";
+            try
+            {
+                fs = new FileStream(path, FileMode.Create, FileAccess.Write);
+
+                sistema.RetirarCamion(fs, camionElegido);
+
+                MessageBox.Show("Archivo Exportado!");
+
+                lsbCarga.Items.Clear(); //Limpio el lsb de la carga del camion.
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error en la Exportación del Camion con paquetes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (fs != null) fs.Close();
+            }
 
         }
 

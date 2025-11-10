@@ -46,6 +46,7 @@
             cmbCamiones = new ComboBox();
             label6 = new Label();
             lsbCarga = new ListBox();
+            openFileDialog1 = new OpenFileDialog();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -230,6 +231,10 @@
             lsbCarga.Size = new Size(384, 154);
             lsbCarga.TabIndex = 1;
             // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
+            // 
             // FormPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -269,5 +274,6 @@
         private ListBox lsbCarga;
         private Button btnRetirar;
         private Button btnAgregar;
+        private OpenFileDialog openFileDialog1;
     }
 }

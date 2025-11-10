@@ -21,7 +21,7 @@ namespace Ejercicio.Models
 
         public override string ToString()
         {
-            return $"{this.NroRegistro};{this.Peso:f2},{this.ZonaDestino}";
+            return $"{this.NroRegistro};{this.Peso:f2};{this.ZonaDestino}";
         }
     }
 }

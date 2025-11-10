@@ -13,9 +13,9 @@ namespace Ejercicio.Models
 
         public Sistema()
         {
-            listaCamiones.Add(new Camion(100, 50.5));
-            listaCamiones.Add(new Camion(101, 20));
-            listaCamiones.Add(new Camion(102, 30.70));
+            listaCamiones.Add(new Camion(100, 2000));
+            listaCamiones.Add(new Camion(101, 2500));
+            listaCamiones.Add(new Camion(102, 1500));
         }
 
         public string[] CamionesCargados()
@@ -71,11 +71,54 @@ namespace Ejercicio.Models
 
         public void Descargar(FileStream fs)
         {
+            StreamReader sr = null;
+            try
+            {
+                sr = new StreamReader(fs);
+                //No tiene encabezado!
+                while(!sr.EndOfStream)
+                {
+                    string linea = sr.ReadLine();
+
+                    string[] splitResult = linea.Split(';');
+
+                    int nroRegistro = Convert.ToInt32(splitResult[0].Trim());
+                    double peso = Convert.ToDouble(splitResult[1].Trim());
+                    string zona = splitResult[2].Trim();
+
+                    Paquete nuevoPaquete = new Paquete(nroRegistro, peso, zona);
+                    ListaPaquetes.Add(nuevoPaquete);
+                }
+            }
+            catch(Exception ex) { throw ex; }
+            finally
+            {
+                if(sr != null) sr.Close();
+            }
 
         }
 
-        public void RetirarCamion(FileStream fs, int poisicion)
+        public void RetirarCamion(FileStream fs, int posicion)
         {
+            Camion camion = listaCamiones[posicion];
+            StreamWriter sw = null;
+            try
+            {
+                sw = new StreamWriter(fs);
+                if (camion != null)
+                {
+                    foreach (string linea in VerCargaCamion(posicion))
+                    {
+                        sw.WriteLine(linea);
+                    }
+                }
+
+            }
+            catch(Exception ex) { throw ex; }
+            finally
+            {
+                if (sw != null) sw.Close();
+            }
 
         }
     }
