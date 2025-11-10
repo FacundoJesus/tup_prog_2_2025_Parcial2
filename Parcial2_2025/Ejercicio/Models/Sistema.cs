@@ -8,7 +8,7 @@ namespace Ejercicio.Models
 {
     public class Sistema
     {
-        public List<Paquete> listaPaquetes = new List<Paquete>();
+        public List<Paquete> ListaPaquetes = new List<Paquete>();
         private List<Camion> listaCamiones = new List<Camion>();
 
         public Sistema()
@@ -37,7 +37,7 @@ namespace Ejercicio.Models
             if(camion != null)
             {
                 camion.AgregarPaquete(paquete);
-                listaPaquetes.Remove(paquete);
+                ListaPaquetes.Remove(paquete);
                 
             }
 
@@ -52,7 +52,7 @@ namespace Ejercicio.Models
             if (camion != null)
             {
                 Paquete paquete = camion.QuitarPaquete();
-                listaPaquetes.Add(paquete);
+                ListaPaquetes.Add(paquete);
 
             }
 

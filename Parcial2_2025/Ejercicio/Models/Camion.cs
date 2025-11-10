@@ -62,7 +62,7 @@ namespace Ejercicio.Models
 
         public override string ToString()
         {
-            return $"{this.Patente} - {this.PesoMax:f2}";
+            return $"{this.Patente} - {this.PesoMax:f2}kg";
         }
 
     }
