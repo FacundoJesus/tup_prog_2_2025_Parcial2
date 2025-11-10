@@ -37,13 +37,12 @@ namespace Ejercicio.Models
 
             if(camion != null)
             {
-                camion.AgregarPaquete(paquete);
-                ListaPaquetes.Remove(paquete);
-                
+                if (camion.AgregarPaquete(unPaquete) == true)
+                {
+                    ListaPaquetes.Remove(unPaquete);
+                }
             }
-
             return camion.CargaEnKg();
-
         }
 
         public double RetirarPaquete(int posicion)
