@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ejercicio.Models
 {
+    [Serializable]
     public class Camion
     {
         private double pesoControl = 0;
@@ -20,14 +21,14 @@ namespace Ejercicio.Models
             this.PesoMax = peso;
         }
 
-        public bool AgregarPaquete(Paquete paquete) {
+        public bool AgregarPaquete(Paquete unPaquete) {
 
-            if (paquete == null) throw new NullReferenceException("Paquete Nulo!");
+            if (unPaquete == null) throw new NullReferenceException("Paquete Nulo!");
 
-            if (pesoControl < PesoMax)
+            if (pesoControl + unPaquete.Peso < PesoMax)
             {
-                manifiesto.Push(paquete);
-                pesoControl += paquete.Peso;
+                manifiesto.Push(unPaquete);
+                pesoControl += unPaquete.Peso;
                 return true;
             }
             return false;

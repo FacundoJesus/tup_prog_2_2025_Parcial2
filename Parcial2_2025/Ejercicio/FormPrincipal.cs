@@ -34,7 +34,6 @@ namespace Ejercicio
                 }
 
             }
-
         }
         private void VerCarga()
         {
@@ -85,7 +84,7 @@ namespace Ejercicio
                 }
 
 
-                if (paquete != null && camionElegido < -1)
+                if (camionElegido > -1)
                 {
                     double pesoActual = sistema.CargarPaquete(camionElegido, paquete);
 
@@ -107,12 +106,11 @@ namespace Ejercicio
             {
                 MessageBox.Show(ex.Message, "Otro tipo de Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void btnRetirar_Click(object sender, EventArgs e)
         {
-            if (camionElegido != -1)
+            if (camionElegido > -1)
             {
                 double pesoActual = sistema.RetirarPaquete(camionElegido);
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ejercicio.Models
 {
+    [Serializable]
     public class Sistema
     {
         public List<Paquete> ListaPaquetes = new List<Paquete>();

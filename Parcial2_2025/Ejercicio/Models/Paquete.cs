@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ejercicio.Models
 {
+    [Serializable]
     public class Paquete
     {
         public int NroRegistro { get; set; }
